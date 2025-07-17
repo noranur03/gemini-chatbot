@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}Norabot{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-gradient-to-br from-[#f5f7fa] to-[#c3cfe2] text-gray-800">
+
+  <nav class="bg-blue-500 text-white px-6 py-4 flex justify-between items-center">
+    <div class="text-xl font-bold">🤖 Norabot</div>
+    <div>
+      {% if current_user.is_authenticated %}
+        <span class="mr-4">Hai, {{ current_user.name }}</span>
+        <a href="{{ url_for('auth.logout') }}" class="underline">Logout</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="mr-4 underline">Login</a>
+        <a href="{{ url_for('auth.register') }}" class="underline">Register</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="flex-1 relative">
+    {% if current_user.is_authenticated %}
+      <h2 class="text-2xl font-bold mb-6 text-center mt-4">Selamat datang, {{ current_user.name }}!</h2>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="text-center py-6 text-sm text-gray-600 relative z-10">
+    &copy; 2025 Norabot. Dibuat oleh Nora 🤖
+  </footer>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div id="flashModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-96 text-center shadow-lg animate-fade-in relative">
+          <h3 class="text-lg font-semibold mb-3 text-red-600">Pesan</h3>
+          <ul class="space-y-2 mb-4">
+            {% for message in messages %}
+              <li class="text-gray-700">{{ message }}</li>
+            {% endfor %}
+          </ul>
+          <button onclick="document.getElementById('flashModal').classList.add('hidden')"
+                  class="text-sm text-blue-600 hover:text-blue-800 underline">Tutup</button>
+        </div>
+      </div>
+    {% endif %}
+  {% endwith %}
+
+</body>
+</html>
