@@ -8,7 +8,8 @@ import time
 load_dotenv()
 
 # Configure Gemini API
-genai.configure(api_key="AIzaSyAS9ReMCGSnUVS9cOwTXM5bXp7oY4WXsXM")
+API_KEY = os.getenv("api_key")
+genai.configure(api_key=API_KEY)
 
 # Set page config
 st.set_page_config(
